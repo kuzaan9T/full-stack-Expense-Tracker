@@ -1,0 +1,17 @@
+import mongoose from 'mongoose';
+
+const transactionSchema = new mongoose.Schema(
+  {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    type: { type: String, enum: ['income', 'expense'], required: true },
+    amount: { type: Number, required: true, min: 0.01 },
+    category: { type: String, required: true, trim: true },
+    date: { type: Date, required: true },
+    note: { type: String, trim: true, default: '' },
+  },
+  { timestamps: true, versionKey: false }
+);
+
+transactionSchema.index({ user: 1, date: -1 });
+
+export default mongoose.model('Transaction', transactionSchema);
